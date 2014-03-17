@@ -1,5 +1,5 @@
 #Hillel Weintraub
-#ECE 464: Natural Language Processing
+#ECE 467: Natural Language Processing
 #
 #TCtrain - a program that trains a text categorization system
 
@@ -30,7 +30,6 @@ class Token:
 	def setTFIDF():
 		for tfidf in self.TF_dict.values():
 			tfidf.TFIDF = self.IDF*tfidf.TF
-
 
 # getWords()
 # tokenizes file and return list of tokens
