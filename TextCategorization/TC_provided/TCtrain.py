@@ -5,13 +5,15 @@
 
 from math import log,sqrt
 import nltk
-import cpickle
+import cPickle
+
+# a class/struct to store TF and TFIDF values
+# not nested to support pickling
+class TFIDFStruct: 
+		pass
 
 class Token:
 	"""A class to store the IDF value and list of TF/TFIDF values for a given token (a.k.a. word)"""
-	
-	class TFIDFStruct: # a nested class/struct to store TF and TFIDF values
-		pass
 	
 	def __init__(self):
 		self.TF_dict={}  #key is category name, value is a TFIDF struct for that document
@@ -27,7 +29,7 @@ class Token:
 	def setIDF(self,N):
 		self.IDF =  log(float(N)/self.numdocs)
 
-	def setTFIDF():
+	def setTFIDF(self):
 		for tfidf in self.TF_dict.values():
 			tfidf.TFIDF = self.IDF*tfidf.TF
 
@@ -72,7 +74,7 @@ def normalizeCategories(categoryDict):
 			if category in scalefactors:
 				scalefactors[category]+=tfidf.TFIDF**2
 			else:
-				scascalefactors[category] = tfidf.TFIDF**2
+				scalefactors[category] = tfidf.TFIDF**2
 	# update TFIDF values
 	for token in categoryDict.values():
 		for category, tfidf in token.TF_dict.iteritems():
@@ -87,7 +89,7 @@ def buildCategoryDict():
 	with open(trainListFileName,'r') as trainList:
 		Numdocs=0
 		for line in trainList:
-			numdocs+=1
+			Numdocs+=1
 			trainingFile, category = line.split()
 			wordList = getWords(trainingFile)     # tokenize file and return list of tokens
 			updateCategoryDict(categoryDict,wordList,category) # update the TF values and the number of docs that contain each word
@@ -100,8 +102,9 @@ def buildCategoryDict():
 def saveCategoryDict(categoryDict):
 	outFile = raw_input('Enter the name of an output file in which to store the learned statistics: ')
 	with open(outFile,'wb') as output:
-		cpickle.dump(categoryDict,output)
+		cPickle.dump(categoryDict,output)
 
 #Driver program: Builds a categoryDict and saves it to a file to be used in TCTest.py
-categoryDict = buildCategoryDict()
-saveCategoryDict(categoryDict)
+if __name__ == "__main__":
+	categoryDict = buildCategoryDict()
+	saveCategoryDict(categoryDict)
