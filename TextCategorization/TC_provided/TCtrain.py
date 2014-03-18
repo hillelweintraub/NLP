@@ -104,7 +104,8 @@ def saveCategoryDict(categoryDict):
 	with open(outFile,'wb') as output:
 		cPickle.dump(categoryDict,output)
 
-#Driver program: Builds a categoryDict and saves it to a file to be used in TCTest.py
+#Driver program: Builds a categoryDict and saves it to a file to be used in TCtest.py
 if __name__ == "__main__":
-	categoryDict = buildCategoryDict()
+	import TCtrain # so pickling works correctly
+	categoryDict = TCtrain.buildCategoryDict()
 	saveCategoryDict(categoryDict)
